@@ -5,8 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Edit here with the names of your latex file and directory (can use ".")
-      DIR: draft
-      FILE: .
+      DIR: .
+      FILE: main
     steps:
       - name: Checkout
         uses: actions/checkout@v2
