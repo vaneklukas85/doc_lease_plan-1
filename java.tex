@@ -1,1 +1,63 @@
 \chapter{Java}
+
+Samotný vykonávaci program je napisaný v jazyku Java. Na spustenie je potrebné mať nainštalovanú minimáalne verziu Java 1.7.
+Jeho úlohou je na základe dodaných údajov v dohodnutom interface pripravit a vygenerovať obrázok v zmysle štandaru Slovenskej bankovej asociácie.
+
+QR kód pay by square môže obsahovať údaje pre nasledovné platobné príkazy:
+\begin{itemize}
+    \item platobný príkaz
+    \item hromadný platobný príkaz
+    \item trvalý platobný príkaz
+    \item zriadenie inkasa
+\end{itemize}
+
+Program má v súčasnosti implementovanú len prvú možnosť, teda platobný príkaz pre 1 účet.
+
+\section{Interface}
+
+V tabuľke \ref{tab:java_interface} je zobrazená štruktúra tabuľky. 
+
+\begin{table}[!ht]
+\caption{Interface Java programu pay by square}
+\label{tab:java_interface}
+\begin{center}
+    \begin{tabular}{|c|c|c|l|}
+    \hline
+    \textbf{Názov} & \textbf{Datový typ} & \textbf{Povinné pole} & \textbf{Popis} \\ \hline
+    HCIIV           & BigDecimal & Áno & číslo faktúry, pre internú identifikáciu \\ \hline
+    HCIAM           & BigDecimal & Áno & suma \\ \hline
+    HDUT            & String     & Nie & dátum platby \\ \hline
+    VARSYM          & String     & Nie & variabilný symbol, ak je prázdny použije sa pole HCCIV\\ \hline
+    HSSYM           & String     & Nie & špecifický symbol \\ \hline
+    HPAYN           & String     & Áno & správa pre príjmateľa \\ \hline
+    HIBAN           & String     & Áno & IBAN číslo účtu príjmateľa \\ \hline
+    HBIC            & String     & Áno & SWIFT kód banky príjmateľa \\ \hline
+    CurrCode        & String     & Áno & konštanta 'EUR' \\ \hline
+    RefInf          & String     & Áno & V tvare /VS[VARSYM]/SS[HSSYM]/KS[308] \\ \hline
+    BenName         & String     & Áno & konštanta 'Ayvens' \\ \hline
+    BenAdr          & String     & Áno & konštanta 'Ševčenkova 34,851 01 Bratislava'\\ \hline
+    QRFilePath      & String     & Áno & konštanta '' \\ \hline
+    QRFileName      & String     & Áno & názov súboru v tvare 'HCIIV.png' \\ \hline
+    \end{tabular} 
+\end{center}    
+\end{table}
+
+\newpage
+\section{Popis programu}
+
+Program je impelemtnovaný v hlavnej triede PayBySquareGen, ktorá implentuje interface PayBySquareGen_I. Trieda poskytuje pulic metódu  generate, ktora je override z interface PayBySquareGen_I. Ide o metódu so vstupnými parametrami v zmysle dohodnotého interface medzi AS400 a týmto Java programom. Java program umožnuje vygenerovanie QR kódu aj na základe parametrov, ktoré sa odovzdávaju ako commandline parametre.
+
+Program na generovanie QR kódu pay by square prebieha v nasledujúcich krokoch:
+
+\begin{enumerate}
+    \item vygenerovanie textoveho reťazca na základe zadaných údajov z AS400
+    \item výpočet CRC32 kontrolnej sumy
+    \item LZMA kompresia
+    \item Base32 kódovanie
+    \item vygenerovanie QR kódu a uloženie do požadovaného súboru
+\end{enumerate}
+
+
+\section{Logovanie}
+Logy sú generované pomocou knižnice log4j a sa zaznamenaju buď fyzicky do súboru alebo môžu byť nasmerované aj do konzoly. Súbor sa ukladá do adresára '/logs/'. Obsahujú niekoľko typov tzv. levelov logovania Info, Debug, Error. 
+Konfigúracia kde sa toto všetko nastavuje sa nachádza v súbore log4j.properties, kde sa na začiatku definguje tzv. root logger options. Ďalej nasledujú tzv. appenders, cez ktoré si vieme zmeniť napr aj adresár a názov súboru, max. veľkosť súboru prípadne max. počet súborov... Ďalej sa da ovplývniť aj formát vygenerovaného logu.
