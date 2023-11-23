@@ -58,7 +58,9 @@ DZPBSGEN         & SQLRPGLE     & QRPGLESRC               & Modul na generovanie
 
 
 \subsection{\acs{CLLE} programy}
+\label{sub:CLLE_programy}
 \subsubsection{DZPBSCLIN}
+\label{subsub:DZPBSCLIN}
 V jazyku CL existuje jeden program s názvom DZPBSCLIN. Program si na spustenie vyžaduje dva vstupné parametre. Prvým z nich je knižnica do ktorej budú vytvorené objekty. Druhým parametrom je typ inštalácie. Prípustné hodnoty pre tento parameter sú: \textbf{INSTALL} a \textbf{RECOMPILE}. Funkcia INSTALL vytvorí všetky potrebné objekty. Objekty, ktoré vytvorí beh programu budú popísané neskôr.
 
 Druhá možnosť, je možnosť rekompilácie programov. Pri rekompilácií sú vytvorené RPGLE moduly, servisný program. Príkaz na spustenie inštalácie je bližšie popísaný v \ref{sec:recompl}
@@ -73,7 +75,7 @@ DZPBSCLIN        & CLLE         &                                       &       
 DZPBSTST         & RPGLE        & x                                     & x                                      &                                      & x                                   & x                                 \\ \hline
 DZPBSGE\_PR      & RPGLE        &                                       &                                        &                                      &                                     &                                   \\ \hline
 DZPBSGEN         & SQLRPGLE     & x                                     & x                                      & x                                    & x                                   &                                   \\ \hline
-DZPBSLOG         & \acs{SQL}          & x                                     &                                        &                                      &                                     &                                   \\ \hline
+DZPBSLOG         & \acs{SQL}          & x                               &                                        &                                      &                                     &                                   \\ \hline
 \end{tabular}
 \end{table}
 
@@ -87,6 +89,8 @@ V programe DZPBSGEN sa na začiatku inicializuje konštruktor. Neskôr sa inicia
 V hlavnej procedúre programu sa najskôr naplní dátová area da\_QrOutPath. V dátovej arei je uložená cesta pre ukladanie QR kódu. Názov uloženého QR kódu  Na záver sa naplnia premnné \textbf{j\_} . Toto značí, že sa jedná o dátové typy, ktoré používa Java, ktorá generuje QR kódy.
 
 Referenčná hodnota je v tvare \textbf{VSxxxxxxxxxx/SSyyyyyyyyyyy/KS0308}.
+
+\subsubsection*{Interface}
 
 Na záver v main časti sa zaloguje do tabuľky DZPBSLOG všetky vstupné údaje. Prebieha uloženie do premennej j\_ret, kde sa ukladá návratová hodnata, ktorú vracia java. 
 
@@ -137,3 +141,14 @@ V tabuľke \ref{tab:table_struct} je zobrazená štruktúra tabuľky. Zdrojový 
     \end{tabular}
 \end{center}    
 \end{table}
+
+\subsection{Inštalácia javy v AS400}
+Java sa na AS400 nasadzuje pomocou \acs{IFS}, kde sa nahrá \acs{JAR} súbor, ktorý je skompilovaný na verziu javy, ktorú má naša AS400.
+
+Overenie verzie javy je možné v AS400 vyvolaním príkazu \ac{QSH}. V príkazovom riadku prostredia QSH vyvoláme príkaz \begin{minted}[bash]java -version \end{minted}
+
+\begin{figure}
+    \centering
+        \includegraphics[width=0.7\textwidth]{img/java_version.png}
+        \label{fig:java_version}
+\end{figure}
